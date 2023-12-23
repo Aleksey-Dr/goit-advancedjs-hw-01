@@ -7,34 +7,33 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 console.log(galleryItems);
 
 const gallery = document.querySelector('.gallery');
-gallery.remove();
-const paragraph = document.querySelector('p');
-const galleryNew = document.createElement('div');
-paragraph.after(galleryNew);
-galleryNew.classList.add('gallery');
 
 createGalleryItems();
 
 function createGalleryItems() {
-    const items = [];
 
-    for (let i = 0; i < galleryItems.length; i++) {
+    const item = galleryItems.map((image) => {
+        return `
+                    <li class="gallery__item">
+                        <a
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href="${image.original}"
+                            aria-label="Image"
+                            class="gallery__link"
+                        >
+                            <img
+                                src="${image.preview}"
+                                alt="${image.description}"
+                                class="gallery__image"
+                            />
+                        </a>
+                    </li>
+                `
+    }).join("");
 
-        const item = document.createElement('a');
-        item.href = galleryItems[i].original;
-        item.classList.add('gallery__item');
-
-        const image = document.createElement('img');
-        item.append(image);
-        image.src = galleryItems[i].preview;
-        image.alt = galleryItems[i].description;
-        image.classList.add('gallery__image');
-
-        items.push(item);
-    }
-
-    galleryNew.append(...items);
-}
+    gallery.innerHTML = item;
+};
 
 const lightbox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
